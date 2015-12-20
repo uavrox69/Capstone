@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/ovenpref"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sunset_background"
+    android:baselineAligned="false"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/main_title"
+        android:layout_width="562dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Memory Journal"
+        android:textSize="25sp"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_below="@+id/main_title"
+        >
+        <RelativeLayout
+            android:layout_width="200dp"
+            android:layout_height="150dp"
+            android:layout_centerInParent="true">
+            <Button
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:layout_centerHorizontal="true"
+                />
+            </RelativeLayout>
+
+    </RelativeLayout>
+</RelativeLayout>
