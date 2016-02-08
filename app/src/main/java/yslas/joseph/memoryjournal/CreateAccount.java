@@ -21,7 +21,7 @@ import android.widget.TextView;
  */
 public class CreateAccount extends FragmentActivity
 {
-    String[] securityQuestions = {"Security Question","What city were you born in?","What was your mothers maiden name","What was your first job?",
+    String[] securityQuestions = {"Security Question","What city were you born in?","What was your mothers maiden name?","What was your first job?",
             "What was your first pets name?","Where did you attend fourth grade at?","What did you want to be when you grew up?",
             "What is your favorite color", "Who was your best friend when you were younger?"};
 
