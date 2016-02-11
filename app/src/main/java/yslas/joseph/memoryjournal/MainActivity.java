@@ -3,19 +3,30 @@ package yslas.joseph.memoryjournal;
 import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import java.io.IOException;
+
 
 public class MainActivity extends ActionBarActivity {
+
+    Database db = new Database(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_screen);
         Button create = (Button)(findViewById(R.id.create_account));
+
+        try {
+            db.createDataBase();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override

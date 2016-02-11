@@ -14,6 +14,7 @@ import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * Created by Joseph Yslas on 12/22/2015.
@@ -118,6 +119,7 @@ public class CreateAccount extends FragmentActivity
         LayoutInflater inflater = getLayoutInflater();
         createView = inflater.inflate(R.layout.text_popup, null);
         createArea.addView(createView);
+        //Toast.makeText(this,"you",Toast.LENGTH_LONG).show(); try this, look at custom toast
 
         RelativeLayout popup = (RelativeLayout)findViewById(R.id.text_popup);
         RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)popup.getLayoutParams();

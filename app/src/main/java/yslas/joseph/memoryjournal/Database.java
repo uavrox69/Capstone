@@ -19,4 +19,99 @@ import android.util.Log;
  * Created by JYsla_000 on 2/7/2016.
  */
 public class Database extends SQLiteOpenHelper {
+    private static final String DB_PATH = "/data/data/yslas.joseph.memoryjournal/databases/";
+    private static final String DB_NAME = "mem_journal";
+    public static final int DB_VERSION = 1;
+    private static final String TABLE_ACCOUNT = "account";
+    private static final String TABLE_SEC_QUES = "password_questions";
+    private static final String TABLE_PASS_ANS = "password_answer";
+    private static final String PRIMKEY_SECURITY = "quest_id";
+    private static final String PRIMKEY_ACCOUNT = "email";
+    private static final String PRIMKEY_SEC_ANS = "answer_id";
+
+    private SQLiteDatabase database;
+    private final Context myContext;
+
+    public Database(Context context) {
+        super(context,DB_NAME,null,DB_VERSION);
+        myContext = context;
+    }
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+
+
+    }
+
+    private boolean DBexists()
+    {
+
+        return myContext.getDatabasePath(DB_NAME).exists();
+    }
+
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL("DROP TABLE IF EXISTS " + DB_NAME);
+        onCreate(db);
+    }
+
+    public void createDataBase() throws IOException {
+
+        // By calling this method and empty database will be created into
+        // the default system path
+        // of your application so we are going to be able to overwrite that
+        // database with our database.
+
+        if (!DBexists())
+        {
+            Log.d("database", "creating db");
+            try
+            {
+                this.getReadableDatabase();
+                copyDataBase();
+            }
+            catch (IOException e)
+            {
+                throw new Error("Unable to copy database");
+            }
+        }
+        else
+        {
+            Log.d("database", "db already created");
+        }
+
+    }
+
+    /**
+     * Copies your database from your local assets-folder to the just created
+     * empty database in the system folder, from where it can be accessed and
+     * handled. This is done by transfering bytestream.
+     * */
+    private void copyDataBase() throws IOException {
+
+
+        // Open your local db as the input stream
+        InputStream myInput = myContext.getAssets().open(DB_NAME);
+        // Path to the just created empty db
+        String outFileName = DB_PATH + DB_NAME;
+
+        SQLiteDatabase db = SQLiteDatabase.openDatabase(outFileName, null, 0);
+        db.execSQL("DROP TABLE IF EXISTS " + DB_NAME);
+        db.close();
+
+        // Open the empty db as the output stream
+        OutputStream myOutput = new FileOutputStream(outFileName);
+
+        // transfer bytes from the inputfile to the outputfile
+        byte[] buffer = new byte[1024];
+        int length;
+        while ((length = myInput.read(buffer)) > 0) {
+            myOutput.write(buffer, 0, length);
+        }
+
+        // Close the streams
+        myOutput.flush();
+        myOutput.close();
+        myInput.close();
+    }
+
 }
