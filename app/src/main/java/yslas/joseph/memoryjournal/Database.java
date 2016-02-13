@@ -28,6 +28,10 @@ public class Database extends SQLiteOpenHelper {
     private static final String PRIMKEY_SECURITY = "quest_id";
     private static final String PRIMKEY_ACCOUNT = "email";
     private static final String PRIMKEY_SEC_ANS = "answer_id";
+    private static final String COL_QUES = "question";
+    private static final String COL_A_EMAIL = "acct_email";
+    private static final String COL_Q_ID = "quest_id";
+    private static final String COL_ANS = "answer";
 
     private SQLiteDatabase database;
     private final Context myContext;
@@ -113,5 +117,45 @@ public class Database extends SQLiteOpenHelper {
         myOutput.close();
         myInput.close();
     }
+
+    public void openDataBase() throws SQLException {
+
+        // Open the database
+        String myPath = DB_PATH + DB_NAME;
+        database = SQLiteDatabase.openDatabase(myPath, null, SQLiteDatabase.OPEN_READWRITE);
+    }
+
+
+    @Override
+    public synchronized void close() {
+
+        if (database != null)
+            database.close();
+
+        super.close();
+    }
+
+    //this is to place the information into the database
+    public  void insertAccount ( String email, String fName, String lName,String password, int q1,
+                                 int q2, String a1, String a2 )
+    {
+
+        database.execSQL("INSERT INTO " + TABLE_ACCOUNT + "VALUES ( \'" + email + "\', \'" + fName +
+        "\', \'" + lName + "\', \'" + password +"\' );");
+
+        database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL + COL_Q_ID + COL_ANS +") " + "VALUES ( \'"+ email  +"\', \'" + q1 +
+                "\', \'" + a1 + " \');");
+
+        database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL + COL_Q_ID + COL_ANS+") " + "VALUES ( \'"+ email  +"\', \'" + q2 +
+                "\', \'" + a2 + " \');");
+
+
+    }
+
+    //for sqlite so we can have no errors with statements
+    private String fixApostrophe(String actual) {
+        return actual.replace("'", "''");
+    }
+
 
 }
