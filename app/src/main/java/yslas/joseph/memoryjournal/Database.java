@@ -32,9 +32,14 @@ public class Database extends SQLiteOpenHelper {
     private static final String COL_A_EMAIL = "acct_email";
     private static final String COL_Q_ID = "quest_id";
     private static final String COL_ANS = "answer";
+    private static final String COL_F_NAME = "f_name";
+    private static final String COL_L_NAME = "l_name";
+    private static final String COL_PASS = "password";
 
     private SQLiteDatabase database;
     private final Context myContext;
+    private static Cursor categoryCursor;
+    private static Cursor categoryCursor2;
 
     public Database(Context context) {
         super(context,DB_NAME,null,DB_VERSION);
@@ -148,6 +153,50 @@ public class Database extends SQLiteOpenHelper {
 
         database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL + COL_Q_ID + COL_ANS+") " + "VALUES ( \'"+ email  +"\', \'" + q2 +
                 "\', \'" + a2 + " \');");
+
+
+    }
+
+    public UserAccount getAccount(String email)
+    {
+        categoryCursor = database.query( TABLE_ACCOUNT,  null,
+                PRIMKEY_ACCOUNT + "=?",  new String[] { email }, null, null, PRIMKEY_ACCOUNT + " ASC", null);
+        categoryCursor2 = database.query( TABLE_PASS_ANS,  null,
+                COL_A_EMAIL + "=?",  new String[] { email }, null, null, COL_A_EMAIL + " ASC", null);
+
+        boolean emailExists = false;
+        UserAccount returnAccount;
+
+        if (categoryCursor != null && categoryCursor2 != null )
+        {
+            emailExists = categoryCursor.moveToFirst();
+            categoryCursor2.moveToFirst();
+        }
+        if (emailExists) {
+            String aEmail = categoryCursor.getString(categoryCursor.getColumnIndex(PRIMKEY_ACCOUNT));
+            String aFname = categoryCursor.getString(categoryCursor.getColumnIndex(COL_F_NAME));
+            String aLname = categoryCursor.getString(categoryCursor.getColumnIndex(COL_L_NAME));
+            String aPassword = categoryCursor.getString(categoryCursor.getColumnIndex(COL_PASS));
+            ArrayList<String>aAnswers = new ArrayList<String>(categoryCursor2.getCount());
+            ArrayList<String>aQuestions = new ArrayList<String>(categoryCursor2.getCount());
+
+            do{
+                aAnswers.add(categoryCursor2.getString(categoryCursor2.getColumnIndex(COL_ANS)));
+                int qID = categoryCursor2.getInt(categoryCursor2.getColumnIndex(COL_Q_ID));
+                categoryCursor = database.query( TABLE_SEC_QUES,  null,
+                        COL_Q_ID + "=?",  new String[] { String.valueOf(qID) }, null, null, PRIMKEY_ACCOUNT + " ASC", null);
+                categoryCursor.moveToFirst();
+                aQuestions.add(categoryCursor.getString(categoryCursor.getColumnIndex(COL_QUES)));
+
+            }while (categoryCursor2.moveToNext());
+            returnAccount = new UserAccount(aEmail,aFname,aLname,aPassword,aQuestions.get(0),aQuestions.get(1),aAnswers.get(0),aAnswers.get(1));
+            return returnAccount;
+        }
+        else
+        {
+            return null;
+        }
+
 
 
     }

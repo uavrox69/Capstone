@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.GridLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
@@ -31,6 +32,7 @@ public class CreateAccount extends FragmentActivity
 
     private View createView = null;
     private RelativeLayout createArea = null;
+    private View popupView = null;
 
 
     @Override
@@ -44,7 +46,7 @@ public class CreateAccount extends FragmentActivity
         Button createAccount = (Button)(findViewById(R.id.create_button));
 
         //these two methods are to create and fill the spinners on the create account page
-        ArrayAdapter<String>questionAdapt = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,securityQuestions){
+        final ArrayAdapter<String>questionAdapt = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,securityQuestions){
             @Override
             public View getDropDownView(int position, View convertView, ViewGroup parent)
             {
@@ -93,12 +95,34 @@ public class CreateAccount extends FragmentActivity
                 return v;
             }
         };
-        questionAdapt.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        questionAdapt2.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         questionSpin2.setAdapter(questionAdapt2);
 
         createAccount.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //todo verify passwords the same, nothing left blank, and change the database
+                String email = ((EditText)popupView.findViewById(R.id.email)).getText().toString() ;
+                String userName = ((EditText)popupView.findViewById(R.id.u_name)).getText().toString() ;
+                String password = ((EditText)popupView.findViewById(R.id.password)).getText().toString();
+                String security_Q1;
+                String security_Q2;
+                String securityA1 = ((EditText)popupView.findViewById(R.id.s_question_answer)).getText().toString();
+                String securityA2 = ((EditText)popupView.findViewById(R.id.s_question_answer2)).getText().toString();
+                if (questionSpin.getSelectedItemPosition() == 0)
+                {
+
+                }
+                else {
+                    security_Q1 = securityQuestions[questionSpin.getSelectedItemPosition()];
+                }
+                if (questionSpin2.getSelectedItemPosition() == 0)
+                {
+
+                }
+                else {
+                    security_Q2 = securityQuestions[questionSpin2.getSelectedItemPosition()];
+                }
                 createMessage();
             }
         });
