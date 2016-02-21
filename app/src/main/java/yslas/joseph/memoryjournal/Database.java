@@ -23,17 +23,16 @@ public class Database extends SQLiteOpenHelper {
     private static final String DB_NAME = "mem_journal";
     public static final int DB_VERSION = 1;
     private static final String TABLE_ACCOUNT = "account";
-    private static final String TABLE_SEC_QUES = "password_questions";
+    //private static final String TABLE_SEC_QUES = "password_questions";
     private static final String TABLE_PASS_ANS = "password_answer";
-    private static final String PRIMKEY_SECURITY = "quest_id";
+    //private static final String PRIMKEY_SECURITY = "quest_id";
     private static final String PRIMKEY_ACCOUNT = "email";
     private static final String PRIMKEY_SEC_ANS = "answer_id";
-    private static final String COL_QUES = "question";
+    private static final String COL_QUES = "quest";
     private static final String COL_A_EMAIL = "acct_email";
-    private static final String COL_Q_ID = "quest_id";
+    //private static final String COL_Q_ID = "quest";
     private static final String COL_ANS = "answer";
-    private static final String COL_F_NAME = "f_name";
-    private static final String COL_L_NAME = "l_name";
+    private static final String COL_U_NAME = "name";
     private static final String COL_PASS = "password";
 
     private SQLiteDatabase database;
@@ -141,17 +140,16 @@ public class Database extends SQLiteOpenHelper {
     }
 
     //this is to place the information into the database
-    public  void insertAccount ( String email, String fName, String lName,String password, int q1,
-                                 int q2, String a1, String a2 )
+    public  void insertAccount ( String email, String uName,String password, String q1,
+                                 String q2, String a1, String a2 )
     {
 
-        database.execSQL("INSERT INTO " + TABLE_ACCOUNT + "VALUES ( \'" + email + "\', \'" + fName +
-        "\', \'" + lName + "\', \'" + password +"\' );");
+        database.execSQL("INSERT INTO " + TABLE_ACCOUNT + "VALUES ( \'" + email + "\', \'" + uName + "\', \'" + password +"\' );");
 
-        database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL + COL_Q_ID + COL_ANS +") " + "VALUES ( \'"+ email  +"\', \'" + q1 +
+        database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL + COL_QUES + COL_ANS +") " + "VALUES ( \'"+ email  +"\', \'" + q1 +
                 "\', \'" + a1 + " \');");
 
-        database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL + COL_Q_ID + COL_ANS+") " + "VALUES ( \'"+ email  +"\', \'" + q2 +
+        database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL + COL_QUES + COL_ANS+") " + "VALUES ( \'"+ email  +"\', \'" + q2 +
                 "\', \'" + a2 + " \');");
 
 
@@ -174,22 +172,17 @@ public class Database extends SQLiteOpenHelper {
         }
         if (emailExists) {
             String aEmail = categoryCursor.getString(categoryCursor.getColumnIndex(PRIMKEY_ACCOUNT));
-            String aFname = categoryCursor.getString(categoryCursor.getColumnIndex(COL_F_NAME));
-            String aLname = categoryCursor.getString(categoryCursor.getColumnIndex(COL_L_NAME));
+            String aUname = categoryCursor.getString(categoryCursor.getColumnIndex(COL_U_NAME));
             String aPassword = categoryCursor.getString(categoryCursor.getColumnIndex(COL_PASS));
             ArrayList<String>aAnswers = new ArrayList<String>(categoryCursor2.getCount());
             ArrayList<String>aQuestions = new ArrayList<String>(categoryCursor2.getCount());
 
             do{
                 aAnswers.add(categoryCursor2.getString(categoryCursor2.getColumnIndex(COL_ANS)));
-                int qID = categoryCursor2.getInt(categoryCursor2.getColumnIndex(COL_Q_ID));
-                categoryCursor = database.query( TABLE_SEC_QUES,  null,
-                        COL_Q_ID + "=?",  new String[] { String.valueOf(qID) }, null, null, PRIMKEY_ACCOUNT + " ASC", null);
-                categoryCursor.moveToFirst();
-                aQuestions.add(categoryCursor.getString(categoryCursor.getColumnIndex(COL_QUES)));
+                aQuestions.add(categoryCursor2.getString(categoryCursor.getColumnIndex(COL_QUES)));
 
             }while (categoryCursor2.moveToNext());
-            returnAccount = new UserAccount(aEmail,aFname,aLname,aPassword,aQuestions.get(0),aQuestions.get(1),aAnswers.get(0),aAnswers.get(1));
+            returnAccount = new UserAccount(aEmail,aUname,aPassword,aQuestions.get(0),aQuestions.get(1),aAnswers.get(0),aAnswers.get(1));
             return returnAccount;
         }
         else
@@ -199,6 +192,13 @@ public class Database extends SQLiteOpenHelper {
 
 
 
+    }
+
+    public Boolean emailExists (String email)
+    {
+        categoryCursor = database.query( TABLE_ACCOUNT,  null,
+                PRIMKEY_ACCOUNT + "=?",  new String[] { email }, null, null, PRIMKEY_ACCOUNT + " ASC", null);
+        return categoryCursor.getCount() > 0;
     }
 
     //for sqlite so we can have no errors with statements

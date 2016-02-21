@@ -3,6 +3,7 @@ package yslas.joseph.memoryjournal;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,21 +30,22 @@ public class CreateAccount extends FragmentActivity
 
     public Spinner questionSpin;
     public Spinner questionSpin2;
+    public String errors = "";
 
     private View createView = null;
-    private RelativeLayout createArea = null;
-    private View popupView = null;
+    private Database db;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_account);
-        createArea = (RelativeLayout)findViewById(R.id.text_popup);
         questionSpin = (Spinner)findViewById(R.id.question_spinner);
         questionSpin2 = (Spinner)findViewById(R.id.question_spinner2);
         Button back = (Button) (findViewById(R.id.main_back_button));
         Button createAccount = (Button)(findViewById(R.id.create_button));
+        db = MainActivity.currInstance.getDb();
 
         //these two methods are to create and fill the spinners on the create account page
         final ArrayAdapter<String>questionAdapt = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,securityQuestions){
@@ -102,77 +104,81 @@ public class CreateAccount extends FragmentActivity
             @Override
             public void onClick(View v) {
                 //todo verify passwords the same, nothing left blank, and change the database
-                String email = ((EditText)popupView.findViewById(R.id.email)).getText().toString() ;
-                String userName = ((EditText)popupView.findViewById(R.id.u_name)).getText().toString() ;
-                String password = ((EditText)popupView.findViewById(R.id.password)).getText().toString();
+                String email = ((EditText)findViewById(R.id.email)).getText().toString() ;
+                String userName = ((EditText)findViewById(R.id.u_name)).getText().toString() ;
+                String password = ((EditText)findViewById(R.id.password)).getText().toString();
+                String passwordRetype = ((EditText)findViewById(R.id.retype_password)).getText().toString();
                 String security_Q1;
                 String security_Q2;
-                String securityA1 = ((EditText)popupView.findViewById(R.id.s_question_answer)).getText().toString();
-                String securityA2 = ((EditText)popupView.findViewById(R.id.s_question_answer2)).getText().toString();
+                String securityA1 = ((EditText)findViewById(R.id.s_question_answer)).getText().toString();
+                String securityA2 = ((EditText)findViewById(R.id.s_question_answer2)).getText().toString();
+
+                //Checking for account creation errors
+                if ( email.isEmpty())
+                {
+                    errors+= "Email is not complete\n";
+                }
+                if ( userName.isEmpty() )
+                {
+                    errors+="User name is not Complete\n";
+                }
+                if ( password.isEmpty()|| passwordRetype.isEmpty())
+                {
+                    errors+="Password is not complete\n";
+                }
+                if ( password.compareTo(passwordRetype) != 0)
+                {
+                    errors+="Passwords do not match\n";
+                }
                 if (questionSpin.getSelectedItemPosition() == 0)
                 {
-
+                    errors+="Question one is not selected\n";
                 }
                 else {
                     security_Q1 = securityQuestions[questionSpin.getSelectedItemPosition()];
+                    Log.d("account", "Security position" + security_Q1);
                 }
                 if (questionSpin2.getSelectedItemPosition() == 0)
                 {
-
+                    errors+="Question two is not selected\n";
                 }
                 else {
                     security_Q2 = securityQuestions[questionSpin2.getSelectedItemPosition()];
                 }
+                if ( securityA1.isEmpty() || securityA2.isEmpty() )
+                {
+                    errors+="Answers is not complete\n";
+                }
+                //if (db)
+                //Log.d("message",errors);
+
                 createMessage();
             }
         });
 
     }
+
     /**
     open the message that will state if anything is wrong with account create
     will take in a string of errors, if null all is well
     */
     private void createMessage()
     {
-        //if it is open return
-        if (createView != null)
-        {
-            return;
+        Toast message;
+        if (!errors.isEmpty()) {
+            message = Toast.makeText(this, errors, Toast.LENGTH_LONG);
+            message.setGravity(Gravity.CENTER, 0, 0);
+            message.show();
+            errors = "";
         }
-        //create the view
-        LayoutInflater inflater = getLayoutInflater();
-        createView = inflater.inflate(R.layout.text_popup, null);
-        createArea.addView(createView);
-        //Toast.makeText(this,"you",Toast.LENGTH_LONG).show(); try this, look at custom toast
-
-        RelativeLayout popup = (RelativeLayout)findViewById(R.id.text_popup);
-        RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams)popup.getLayoutParams();
-        params.setMargins(10,200,0,0);
-        popup.setLayoutParams(params);
-
-        //make the other views disappear
-        View title = findViewById(R.id.creation_layout);
-        title.setVisibility(View.INVISIBLE);
-
-        //close if pressed outside
-        findViewById(R.id.mem_journal).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                closeMessage();
-            }
-        });
+        else
+        {
+            message = Toast.makeText(this, "Account creation complete", Toast.LENGTH_LONG);
+            message.setGravity(Gravity.CENTER, 0, 0);
+            message.show();
+        }
 
     }
-    private void closeMessage()
-    {
-        if (createView == null)
-        {
-            return;
-        }
-        createArea.removeView(createView);
 
-        View title = findViewById(R.id.creation_layout);
-        title.setVisibility(View.VISIBLE);
-    }
 
 }

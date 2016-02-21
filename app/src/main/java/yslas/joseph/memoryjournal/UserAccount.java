@@ -7,20 +7,18 @@ package yslas.joseph.memoryjournal;
  */
 public class UserAccount {
     private String email;
-    private String firstName;
-    private String lastName;
+    private String uName;
     private String password;
     private String security_Q1;
     private String securityA1;
     private String security_Q2;
     private String securityA2;
 
-    public UserAccount(String email, String firstName, String lastName, String password, String security_Q1,
+    public UserAccount(String email, String uName, String password, String security_Q1,
                        String security_Q2, String securityA1, String securityA2)
     {
         this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
+        this.uName = uName;
         this.password = password;
         this.security_Q1 = security_Q1;
         this.security_Q2 = security_Q2;
@@ -36,18 +34,11 @@ public class UserAccount {
         return email;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setUName(String uName) {
+        this.uName = uName;
     }
-    public String getFirstName() {
-        return firstName;
-    }
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    public String getLastName() {
-        return lastName;
+    public String getUName() {
+        return uName;
     }
 
     public void setPassword(String password) {
