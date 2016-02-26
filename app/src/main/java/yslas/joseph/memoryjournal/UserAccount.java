@@ -1,5 +1,7 @@
 package yslas.joseph.memoryjournal;
 
+import android.util.Log;
+
 /**
  * Created by JYsla_000 on 2/12/2016.
  * This is the object for the user account
@@ -74,5 +76,11 @@ public class UserAccount {
     }
     public String getSecurityA2() {
         return securityA2;
+    }
+
+    public void testAccount()
+    {
+        Log.d("account", email + " " + uName + " " + password + " " +security_Q1 + " "
+        + security_Q2 + " " + securityA1 + " " + securityA2);
     }
 }

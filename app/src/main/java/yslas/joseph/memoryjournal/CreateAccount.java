@@ -31,9 +31,11 @@ public class CreateAccount extends FragmentActivity
     public Spinner questionSpin;
     public Spinner questionSpin2;
     public String errors = "";
+    public UserAccount user;
 
     private View createView = null;
     private Database db;
+    boolean creationSuc = false;
 
 
 
@@ -108,10 +110,12 @@ public class CreateAccount extends FragmentActivity
                 String userName = ((EditText)findViewById(R.id.u_name)).getText().toString() ;
                 String password = ((EditText)findViewById(R.id.password)).getText().toString();
                 String passwordRetype = ((EditText)findViewById(R.id.retype_password)).getText().toString();
-                String security_Q1;
-                String security_Q2;
+                String security_Q1= "";
+                String security_Q2= "";
                 String securityA1 = ((EditText)findViewById(R.id.s_question_answer)).getText().toString();
                 String securityA2 = ((EditText)findViewById(R.id.s_question_answer2)).getText().toString();
+
+                Log.d("account", securityA2 + " + " +securityA1);
 
                 //Checking for account creation errors
                 if ( email.isEmpty())
@@ -149,10 +153,20 @@ public class CreateAccount extends FragmentActivity
                 {
                     errors+="Answers is not complete\n";
                 }
-                //if (db)
+                if (db.emailExists(email))
+                    errors+="Email already exists";
                 //Log.d("message",errors);
-
                 createMessage();
+                //no errors create the account
+                if (creationSuc)
+                {
+                    db.insertAccount(email, userName, password, security_Q1, security_Q2, securityA1, securityA2);
+                    user= db.getAccount(email);
+                    MainActivity.currInstance.fillAccount(user);
+                    //user.testAccount();
+                    creationSuc = false;
+                    startActivity(new Intent(CreateAccount.this,JournalMainScreen.class));
+                }
             }
         });
 
@@ -176,6 +190,7 @@ public class CreateAccount extends FragmentActivity
             message = Toast.makeText(this, "Account creation complete", Toast.LENGTH_LONG);
             message.setGravity(Gravity.CENTER, 0, 0);
             message.show();
+            creationSuc = true;
         }
 
     }

@@ -144,12 +144,13 @@ public class Database extends SQLiteOpenHelper {
                                  String q2, String a1, String a2 )
     {
 
-        database.execSQL("INSERT INTO " + TABLE_ACCOUNT + "VALUES ( \'" + email + "\', \'" + uName + "\', \'" + password +"\' );");
+        database.execSQL("INSERT INTO " + TABLE_ACCOUNT + " VALUES ( \'" + email + "\', \'" + uName + "\', \'" + password +"\' );");
 
-        database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL + COL_QUES + COL_ANS +") " + "VALUES ( \'"+ email  +"\', \'" + q1 +
+
+        database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL + ", " + COL_QUES + ", " + COL_ANS +") " + " VALUES ( \'"+ email  +"\', \'" + q1 +
                 "\', \'" + a1 + " \');");
 
-        database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL + COL_QUES + COL_ANS+") " + "VALUES ( \'"+ email  +"\', \'" + q2 +
+        database.execSQL("INSERT INTO " + TABLE_PASS_ANS + "( " + COL_A_EMAIL +", " + COL_QUES  + ", " + COL_ANS+") " + " VALUES ( \'"+ email  +"\', \'" + q2 +
                 "\', \'" + a2 + " \');");
 
 
@@ -159,7 +160,7 @@ public class Database extends SQLiteOpenHelper {
     {
         categoryCursor = database.query( TABLE_ACCOUNT,  null,
                 PRIMKEY_ACCOUNT + "=?",  new String[] { email }, null, null, PRIMKEY_ACCOUNT + " ASC", null);
-        categoryCursor2 = database.query( TABLE_PASS_ANS,  null,
+        categoryCursor2 = database.query( true,TABLE_PASS_ANS,  null,
                 COL_A_EMAIL + "=?",  new String[] { email }, null, null, COL_A_EMAIL + " ASC", null);
 
         boolean emailExists = false;
@@ -179,7 +180,7 @@ public class Database extends SQLiteOpenHelper {
 
             do{
                 aAnswers.add(categoryCursor2.getString(categoryCursor2.getColumnIndex(COL_ANS)));
-                aQuestions.add(categoryCursor2.getString(categoryCursor.getColumnIndex(COL_QUES)));
+                aQuestions.add(categoryCursor2.getString(categoryCursor2.getColumnIndex(COL_QUES)));
 
             }while (categoryCursor2.moveToNext());
             returnAccount = new UserAccount(aEmail,aUname,aPassword,aQuestions.get(0),aQuestions.get(1),aAnswers.get(0),aAnswers.get(1));
@@ -196,9 +197,22 @@ public class Database extends SQLiteOpenHelper {
 
     public Boolean emailExists (String email)
     {
-        categoryCursor = database.query( TABLE_ACCOUNT,  null,
+        categoryCursor = database.query( true, TABLE_ACCOUNT,  null,
                 PRIMKEY_ACCOUNT + "=?",  new String[] { email }, null, null, PRIMKEY_ACCOUNT + " ASC", null);
         return categoryCursor.getCount() > 0;
+    }
+
+    public Boolean doesMatch ( String email, String passwordTry )
+    {
+        String password = "";
+        categoryCursor = database.query( true, TABLE_ACCOUNT,  null,
+                PRIMKEY_ACCOUNT + "=?",  new String[] { email }, null, null, PRIMKEY_ACCOUNT + " ASC", null);
+        if (categoryCursor.getCount() > 0)
+        {
+            password = categoryCursor.getString(categoryCursor.getColumnIndex(COL_PASS));
+        }
+
+        return password.equals(passwordTry);
     }
 
     //for sqlite so we can have no errors with statements
