@@ -209,6 +209,7 @@ public class Database extends SQLiteOpenHelper {
                 PRIMKEY_ACCOUNT + "=?",  new String[] { email }, null, null, PRIMKEY_ACCOUNT + " ASC", null);
         if (categoryCursor.getCount() > 0)
         {
+            categoryCursor.moveToFirst();
             password = categoryCursor.getString(categoryCursor.getColumnIndex(COL_PASS));
         }
 

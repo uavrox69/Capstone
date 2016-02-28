@@ -1,5 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mem_journal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sunset_background"
+    android:baselineAligned="false"
+    android:orientation="vertical" >
+    <TextView
+        android:id="@+id/journal_header"
+        android:layout_width="562dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="usernames journal"
+        android:textColor="@android:color/white"
+        android:textSize="25sp"
+        />
+    <RelativeLayout
+        android:id="@+id/journal_button_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/journal_header">
 
-</LinearLayout>
+        <Button
+            android:id="@+id/new_entry"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="25dp"
+            android:text="New entry"/>
+        <Button
+            android:id="@+id/options"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/new_entry"
+            android:text="options"/>
+        <Button
+            android:id="@+id/logout"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/options"
+            android:text="logout"/>
+    </RelativeLayout>
+
+        <android.support.v4.view.ViewPager
+            android:id="@+id/journal_pager"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_below="@+id/journal_button_bar"/>
+</RelativeLayout>

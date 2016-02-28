@@ -115,7 +115,7 @@ public class CreateAccount extends FragmentActivity
                 String securityA1 = ((EditText)findViewById(R.id.s_question_answer)).getText().toString();
                 String securityA2 = ((EditText)findViewById(R.id.s_question_answer2)).getText().toString();
 
-                Log.d("account", securityA2 + " + " +securityA1);
+                //Log.d("account", securityA2 + " + " +securityA1);
 
                 //Checking for account creation errors
                 if ( email.isEmpty())
@@ -140,7 +140,7 @@ public class CreateAccount extends FragmentActivity
                 }
                 else {
                     security_Q1 = securityQuestions[questionSpin.getSelectedItemPosition()];
-                    Log.d("account", "Security position" + security_Q1);
+                    //Log.d("account", "Security position" + security_Q1);
                 }
                 if (questionSpin2.getSelectedItemPosition() == 0)
                 {
@@ -160,12 +160,13 @@ public class CreateAccount extends FragmentActivity
                 //no errors create the account
                 if (creationSuc)
                 {
-                    db.insertAccount(email, userName, password, security_Q1, security_Q2, securityA1, securityA2);
+                    db.insertAccount(email.toLowerCase(), userName, password, security_Q1, security_Q2, securityA1.toLowerCase(), securityA2.toLowerCase());
                     user= db.getAccount(email);
                     MainActivity.currInstance.fillAccount(user);
-                    //user.testAccount();
+                    user.testAccount();
                     creationSuc = false;
                     startActivity(new Intent(CreateAccount.this,JournalMainScreen.class));
+
                 }
             }
         });
