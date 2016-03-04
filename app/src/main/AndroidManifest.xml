@@ -24,6 +24,18 @@
             android:name="yslas.joseph.memoryjournal.JournalMainScreen"
             android:label="@string/app_name" >
         </activity>
+        <activity
+            android:name="yslas.joseph.memoryjournal.EntryScreen"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="yslas.joseph.memoryjournal.PhotoView"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
+            android:name="yslas.joseph.memoryjournal.CreateEntry"
+            android:label="@string/app_name" >
+        </activity>
     </application>
 
 </manifest>

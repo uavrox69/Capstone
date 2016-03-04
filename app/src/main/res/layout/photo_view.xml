@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mem_journal_photo"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sunset_background"
+    android:baselineAligned="false"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/photo_header"
+        android:layout_width="562dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Photo Viewer"
+        android:textColor="@android:color/white"
+        android:textSize="25sp"
+        />
+
+    <ImageView
+        android:id="@+id/photo"
+        android:layout_width="fill_parent"
+        android:layout_height="350dp"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/photo_header"/>
+
+    <ToggleButton
+        android:id="@+id/cover_photo_check"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_below="@+id/photo"
+        android:textOff=""
+        android:textOn=""
+        android:layout_marginLeft="10dp"
+        android:background="@drawable/checkbox"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/cover_photo_check"
+        android:layout_below="@+id/photo"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        android:layout_marginTop="9dp"
+        android:text=" Set Cover Photo"
+
+        />
+
+    <RelativeLayout
+        android:id="@+id/photo_button_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="75dp"
+        android:layout_below="@+id/cover_photo_check"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:id="@+id/back"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:text="back"/>
+
+        <Button
+            android:id="@+id/previous_button"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/back"
+            android:text="previous"/>
+
+        <Button
+            android:id="@+id/next_button"
+            android:layout_width="100dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/previous_button"
+            android:text="next"/>
+        </RelativeLayout>
+</RelativeLayout>
