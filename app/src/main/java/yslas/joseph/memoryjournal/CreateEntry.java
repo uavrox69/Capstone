@@ -27,6 +27,7 @@ public class CreateEntry extends FragmentActivity
     ImageButton mic;
     EditText entry;
     String textEntry = "";
+    Button addPhoto;
 
     protected void onCreate(Bundle savedInstanceState)
     {
@@ -34,6 +35,7 @@ public class CreateEntry extends FragmentActivity
         setContentView(R.layout.create_entry);
         mic = (ImageButton)findViewById(R.id.microphone_click);
         entry = (EditText)findViewById(R.id.enter_entry);
+        addPhoto = (Button)findViewById(R.id.add_photos);
 
         mic.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -53,6 +55,13 @@ public class CreateEntry extends FragmentActivity
                             Toast.LENGTH_SHORT);
                     t.show();
                 }
+            }
+        });
+
+        addPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(CreateEntry.this,PhotoAdd.class));
             }
         });
 

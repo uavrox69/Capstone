@@ -25,15 +25,20 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_ACCOUNT = "account";
     //private static final String TABLE_SEC_QUES = "password_questions";
     private static final String TABLE_PASS_ANS = "password_answer";
+    private static final String TABLE_JOUR_ENT = "journal_entry";
     //private static final String PRIMKEY_SECURITY = "quest_id";
     private static final String PRIMKEY_ACCOUNT = "email";
     private static final String PRIMKEY_SEC_ANS = "answer_id";
+    private static final String PRIMKEY_ENTRY = "entry_id";
     private static final String COL_QUES = "quest";
     private static final String COL_A_EMAIL = "acct_email";
     //private static final String COL_Q_ID = "quest";
     private static final String COL_ANS = "answer";
     private static final String COL_U_NAME = "name";
     private static final String COL_PASS = "password";
+    private static final String COL_ENTRY = "entry";
+    private static final String COL_LOC = "location";
+    private static final String COL_DATE = "date";
 
     private SQLiteDatabase database;
     private final Context myContext;
@@ -154,6 +159,18 @@ public class Database extends SQLiteOpenHelper {
                 "\', \'" + a2 + " \');");
 
 
+    }
+
+    public void insetEntry ( String date, String entry )
+    {
+        database.execSQL("INSERT INTO " + TABLE_JOUR_ENT + "( " + COL_DATE + ", " + COL_ENTRY +") " + " VALUES ( \'"+ date  +"\', \'" + entry + " \');");
+    }
+
+    public void updateTextEntry ( int entryID, String entry )
+    {
+        entry = fixApostrophe(entry);
+        database.execSQL("UPDATE " + TABLE_JOUR_ENT + " SET " + COL_ENTRY+ " = \'"
+                +  entry + "\' WHERE " + PRIMKEY_ENTRY + "=" + entryID );
     }
 
     public UserAccount getAccount(String email)
