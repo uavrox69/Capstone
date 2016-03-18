@@ -22,6 +22,7 @@ public class JournalMainScreen extends FragmentActivity {
         Button options = (Button)findViewById(R.id.options);
         Button logOut = (Button)findViewById(R.id.logout);
 
+
         newEntry.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {

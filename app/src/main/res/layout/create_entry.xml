@@ -37,6 +37,7 @@
         android:background="@drawable/microphone"/>
 
     <TextView
+        android:id="@+id/talk_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/enter_entry"
@@ -52,7 +53,8 @@
         android:layout_width="wrap_content"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
-        android:layout_below="@+id/enter_entry"/>
+        android:layout_below="@+id/enter_entry"
+        android:layout_toRightOf="@+id/talk_text"/>
 
     <TextView
         android:id="@+id/date"
