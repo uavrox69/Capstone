@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.provider.Settings;
 import android.speech.RecognizerIntent;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
@@ -22,7 +23,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
+import android.support.v4.app.FragmentActivity;
+
+import com.google.android.gms.common.api.PendingResult;
+import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.drive.Drive;
 import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.PlaceLikelihood;
+import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
+import com.google.android.gms.location.places.Places;
+import com.google.android.gms.location.places.ui.PlacePicker;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -34,20 +49,26 @@ public class CreateEntry extends FragmentActivity
 {
     protected static final int RESULT_SPEECH = 1;
     private static final String PLACES_SEARCH_URL =  "https://maps.googleapis.com/maps/api/place/search/json?";
+    int PLACE_PICKER_REQUEST = 1;
+    public static CreateEntry currInstance = null;
 
 
     ImageButton mic;
     EditText entry;
     String textEntry = "";
+    String placeLoc = "";
     Button addPhoto,setLoc;
     LocationManager locationManager;
     TextView locText;
-    String location = "";
+    double lat;
+    double longitude;
+
 
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.create_entry);
+        currInstance = this;
         mic = (ImageButton)findViewById(R.id.microphone_click);
         entry = (EditText)findViewById(R.id.enter_entry);
         addPhoto = (Button)findViewById(R.id.add_photos);
@@ -66,9 +87,10 @@ public class CreateEntry extends FragmentActivity
                 }
                 if (loc != null)
                 {
-                    location = loc.getLongitude() + " " + loc.getLatitude();
-                    locText.setText(location);
+                    longitude = loc.getLongitude();
+                    lat = loc.getLatitude();
                 }
+                startActivity(new Intent(CreateEntry.this,GooglePlaces.class));
             }
         });
 
@@ -161,6 +183,14 @@ public class CreateEntry extends FragmentActivity
 
         dialog.show();
     }
+
+    public void setTextView (String location )
+    {
+        locText.setText(location);
+        placeLoc = location;
+    }
+
+
 
 }
 

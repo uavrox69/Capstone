@@ -1,16 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="400dp"
+    android:layout_height="300dp"
+    >
     <TextView
-        android:id="@+id/errorMessage"
-        android:layout_width="300dp"
-        android:layout_height="300dp"
-        android:text="Creation successful! "
-        android:layout_marginLeft="50dp"
-        android:textSize="20dp"
-        android:layout_gravity="center"
-        android:background="@android:color/darker_gray"
-        android:gravity="center"/>
+        android:id="@+id/pop_text"
+        android:layout_width="fill_parent"
+        android:layout_height="50dp"
+        android:gravity="center"
+        android:text="Type Location"
+        android:textColor="@android:color/white"
+        android:background="@color/black"
+        android:textSize="25sp"/>
+
+    <RelativeLayout
+        android:id="@+id/text_layout"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_below="@+id/pop_text"
+        android:background="@color/gray">
+
+        <EditText
+            android:id="@+id/error_message"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@android:color/white"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="30dp"/>
+
+        <Button
+            android:id="@+id/button_set_loc"
+            android:layout_width="150dp"
+            android:layout_height="50dp"
+            android:layout_marginLeft="120dp"
+            android:layout_marginTop="10dp"
+            android:text="Set Location"
+            android:layout_below="@+id/error_message"/>
+
+
+    </RelativeLayout>
 
 </RelativeLayout>
