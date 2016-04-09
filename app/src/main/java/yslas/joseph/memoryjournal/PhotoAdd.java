@@ -3,6 +3,7 @@ package yslas.joseph.memoryjournal;
 import android.app.ActionBar;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
@@ -11,6 +12,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+
+import java.util.ArrayList;
 
 /**
  * Created by JYsla_000 on 3/3/2016.
@@ -19,6 +23,13 @@ public class PhotoAdd extends FragmentActivity
 {
     Button addPhoto,takePhoto;
     ImageView viewPhoto;
+    private LinearLayout lnrImages;
+    private Button btnAddPhots;
+    private Button btnSaveImages;
+    private ArrayList<String> imagesPathList;
+    private Bitmap yourbitmap;
+    private Bitmap resized;
+    private final int PICK_IMAGE_MULTIPLE =1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -27,7 +38,7 @@ public class PhotoAdd extends FragmentActivity
         setContentView(R.layout.take_add_photos);
         addPhoto = (Button)findViewById(R.id.Gallery);
         takePhoto = (Button)findViewById(R.id.take_photo);
-        viewPhoto = (ImageView)findViewById(R.id.taken_photo);
+
 
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -37,16 +48,40 @@ public class PhotoAdd extends FragmentActivity
             }
         });
 
+        addPhoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(PhotoAdd.this,CustomPhotoGalleryActivity.class);
+                startActivityForResult(intent,PICK_IMAGE_MULTIPLE);
+            }
+        });
+
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        // TODO Auto-generated method stub
         super.onActivityResult(requestCode, resultCode, data);
-
-        Bitmap bp = (Bitmap) data.getExtras().get("data");
-        viewPhoto.setImageBitmap(bp);
+        if (resultCode == RESULT_OK) {
+            if (requestCode == PICK_IMAGE_MULTIPLE) {
+                imagesPathList = new ArrayList<String>();
+                String[] imagesPath = data.getStringExtra("data").split("\\|");
+                try {
+                    lnrImages.removeAllViews();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                }
+                for (int i = 0; i < imagesPath.length; i++) {
+                    imagesPathList.add(imagesPath[i]);
+                    yourbitmap = BitmapFactory.decodeFile(imagesPath[i]);
+                    /*
+                    ImageView imageView = new ImageView(this);
+                    imageView.setImageBitmap(yourbitmap);
+                    imageView.setAdjustViewBounds(true);
+                    lnrImages.addView(imageView);
+                    */
+                }
+            }
+        }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.

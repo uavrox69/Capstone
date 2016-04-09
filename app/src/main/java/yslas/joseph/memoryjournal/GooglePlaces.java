@@ -87,7 +87,6 @@ public class GooglePlaces extends FragmentActivity implements OnConnectionFailed
 
                 Place place = PlacePicker.getPlace(data, this);
                 String toastMsg = String.format("%s", place.getName());
-                Toast.makeText(this, toastMsg, Toast.LENGTH_LONG).show();
                 CreateEntry.currInstance.setTextView(toastMsg);
                 super.finish();
 

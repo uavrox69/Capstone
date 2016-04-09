@@ -22,22 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
-
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.common.api.GoogleApiClient;
-import com.google.android.gms.common.api.GoogleApiClient.OnConnectionFailedListener;
-import android.support.v4.app.FragmentActivity;
-
-import com.google.android.gms.common.api.PendingResult;
-import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.drive.Drive;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.PlaceLikelihood;
-import com.google.android.gms.location.places.PlaceLikelihoodBuffer;
-import com.google.android.gms.location.places.Places;
-import com.google.android.gms.location.places.ui.PlacePicker;
+import java.util.Calendar;
+import java.text.SimpleDateFormat;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -57,11 +43,13 @@ public class CreateEntry extends FragmentActivity
     EditText entry;
     String textEntry = "";
     String placeLoc = "";
-    Button addPhoto,setLoc;
+    String curDate = "";
+    Button addPhoto,setLoc,setDate;
     LocationManager locationManager;
-    TextView locText;
+    TextView locText,dateText;
     double lat;
     double longitude;
+    Calendar date;
 
 
     protected void onCreate(Bundle savedInstanceState)
@@ -73,8 +61,10 @@ public class CreateEntry extends FragmentActivity
         entry = (EditText)findViewById(R.id.enter_entry);
         addPhoto = (Button)findViewById(R.id.add_photos);
         locText = (TextView)findViewById(R.id.geo_tag);
-
+        dateText = (TextView)findViewById(R.id.date);
+        setDate = (Button)findViewById(R.id.set_date);
         setLoc = (Button)findViewById(R.id.set_tag);
+
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
         setLoc.setOnClickListener(new View.OnClickListener() {
@@ -120,6 +110,17 @@ public class CreateEntry extends FragmentActivity
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(CreateEntry.this,PhotoAdd.class));
+            }
+        });
+
+        setDate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                date = Calendar.getInstance();
+                SimpleDateFormat fixDate = new SimpleDateFormat(" MM/dd/yyyy ");
+                curDate = fixDate.format(date.getTime());
+                dateText.setText(curDate);
+
             }
         });
 

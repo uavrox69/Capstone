@@ -17,19 +17,26 @@
         android:textColor="@android:color/white"
         android:textSize="25sp"
         />
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scroll1"
+        >
 
-        <FrameLayout
-            android:id="@+id/photo_frame"
+        <LinearLayout
+            android:id="@+id/lnrImages"
             android:layout_width="match_parent"
-            android:layout_height="450dp"
-            android:layout_below="@+id/photo_header">
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-            <ImageView
-                android:id="@+id/taken_photo"
-                android:layout_gravity="center"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent" />
-        </FrameLayout>
+        </LinearLayout>
+    </ScrollView>
+
+
+   <LinearLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:layout_below="@+id/photo_header">
     <Button
         android:id="@+id/take_photo"
         android:layout_width="100dp"
@@ -45,6 +52,6 @@
         android:layout_toRightOf="@+id/take_photo"
         android:layout_marginLeft="5dp"
         android:text="Add Photos"/>
-
+   </LinearLayout>
 </RelativeLayout>
 
