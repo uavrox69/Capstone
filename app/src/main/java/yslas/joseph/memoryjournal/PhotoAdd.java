@@ -7,10 +7,12 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
@@ -21,30 +23,35 @@ import java.util.ArrayList;
  */
 public class PhotoAdd extends FragmentActivity
 {
-    Button addPhoto,takePhoto;
-    ImageView viewPhoto;
-    private LinearLayout lnrImages;
-    private Button btnAddPhots;
-    private Button btnSaveImages;
-    private ArrayList<String> imagesPathList;
-    private Bitmap yourbitmap;
+    Button addPhoto,takePhoto,savePhotos;
+    GridView viewPhoto;
+    ArrayList<String> imagesPathList;
     private Bitmap resized;
-    private final int PICK_IMAGE_MULTIPLE =1;
+
+    //trying stuff
+    public static PhotoAdd currInstance = null;
+
+    private final int PICK_IMAGE_MULTIPLE = 1;
+    private final int PICK_IMAGE_SINGLE = 2;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.take_add_photos);
+        currInstance = this;
         addPhoto = (Button)findViewById(R.id.Gallery);
         takePhoto = (Button)findViewById(R.id.take_photo);
+        savePhotos = (Button)findViewById(R.id.save_photos);
+        viewPhoto = (GridView)findViewById(R.id.grdImages);
 
 
         takePhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent, 0);
+                startActivityForResult(intent,PICK_IMAGE_SINGLE);
             }
         });
 
@@ -56,6 +63,19 @@ public class PhotoAdd extends FragmentActivity
             }
         });
 
+        savePhotos.setOnClickListener( new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateEntry.currInstance.setPhotos(imagesPathList);
+                finish();
+            }
+        });
+
+    }
+
+    protected void onResume()
+    {
+        super.onResume();
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -64,14 +84,9 @@ public class PhotoAdd extends FragmentActivity
             if (requestCode == PICK_IMAGE_MULTIPLE) {
                 imagesPathList = new ArrayList<String>();
                 String[] imagesPath = data.getStringExtra("data").split("\\|");
-                try {
-                    lnrImages.removeAllViews();
-                } catch (Throwable e) {
-                    e.printStackTrace();
-                }
                 for (int i = 0; i < imagesPath.length; i++) {
+                    Log.d("photos", imagesPath[i] );
                     imagesPathList.add(imagesPath[i]);
-                    yourbitmap = BitmapFactory.decodeFile(imagesPath[i]);
                     /*
                     ImageView imageView = new ImageView(this);
                     imageView.setImageBitmap(yourbitmap);
@@ -79,6 +94,10 @@ public class PhotoAdd extends FragmentActivity
                     lnrImages.addView(imageView);
                     */
                 }
+                //trying things
+                DisplayPhotos chosenPhotos = new DisplayPhotos(PhotoAdd.this,imagesPathList);
+                viewPhoto.setAdapter(chosenPhotos);
+
             }
         }
     }
@@ -102,5 +121,11 @@ public class PhotoAdd extends FragmentActivity
             return true;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    //trying
+    public ArrayList<String> grablist()
+    {
+        return  this.imagesPathList;
     }
 }

@@ -34,8 +34,6 @@ import java.util.Locale;
 public class CreateEntry extends FragmentActivity
 {
     protected static final int RESULT_SPEECH = 1;
-    private static final String PLACES_SEARCH_URL =  "https://maps.googleapis.com/maps/api/place/search/json?";
-    int PLACE_PICKER_REQUEST = 1;
     public static CreateEntry currInstance = null;
 
 
@@ -50,6 +48,7 @@ public class CreateEntry extends FragmentActivity
     double lat;
     double longitude;
     Calendar date;
+    ArrayList<String> entPhotos;
 
 
     protected void onCreate(Bundle savedInstanceState)
@@ -64,6 +63,7 @@ public class CreateEntry extends FragmentActivity
         dateText = (TextView)findViewById(R.id.date);
         setDate = (Button)findViewById(R.id.set_date);
         setLoc = (Button)findViewById(R.id.set_tag);
+        entPhotos = new ArrayList<String>();
 
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
@@ -189,6 +189,17 @@ public class CreateEntry extends FragmentActivity
     {
         locText.setText(location);
         placeLoc = location;
+    }
+
+    public void setPhotos (ArrayList<String> photoAdd )
+    {
+
+        for ( String d : photoAdd )
+        {
+           Log.d("photos", d + " " );
+           entPhotos.add(d);
+        }
+
     }
 
 

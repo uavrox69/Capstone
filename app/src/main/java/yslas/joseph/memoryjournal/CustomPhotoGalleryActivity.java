@@ -155,6 +155,7 @@ public class CustomPhotoGalleryActivity extends Activity {
                 convertView = mInflater.inflate(R.layout.custom_gallery_item, null);
                 holder.imgThumb = (ImageView) convertView.findViewById(R.id.imgThumb);
                 holder.chkImage = (CheckBox) convertView.findViewById(R.id.chkImage);
+                holder.chkImage.setVisibility(View.VISIBLE);
 
                 convertView.setTag(holder);
             } else {

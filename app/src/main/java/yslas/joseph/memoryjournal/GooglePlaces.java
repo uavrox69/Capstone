@@ -33,8 +33,6 @@ public class GooglePlaces extends FragmentActivity implements OnConnectionFailed
 
     private GoogleApiClient mGoogleApiClient;
     int PLACE_PICKER_REQUEST = 1;
-    private double lat;
-    private double longitude;
     public static final String TAG = "";
     TextView locText;
     String placeName = "";

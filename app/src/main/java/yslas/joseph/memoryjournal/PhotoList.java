@@ -8,14 +8,19 @@ import java.util.List;
  */
 public class PhotoList {
 
-    private List<String> photos = new ArrayList<String>();
+    ArrayList<String> photos = new ArrayList<String>();
+
+    public void PhotoList ()
+    {
+        photos = new ArrayList<String>();
+    }
 
     public void addPhoto (String photoPhath)
     {
         photos.add(photoPhath);
     }
 
-    public List<String> getPhotos()
+    public ArrayList<String> getPhotos()
     {
         return photos;
     }

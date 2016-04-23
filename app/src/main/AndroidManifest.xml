@@ -46,6 +46,10 @@
             android:label="@string/app_name" >
         </activity>
         <activity
+            android:name="yslas.joseph.memoryjournal.DisplayPhotos"
+            android:label="@string/app_name" >
+        </activity>
+        <activity
             android:name="yslas.joseph.memoryjournal.CustomPhotoGalleryActivity"
             android:label="@string/app_name" >
         </activity>

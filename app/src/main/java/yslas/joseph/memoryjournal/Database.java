@@ -26,6 +26,7 @@ public class Database extends SQLiteOpenHelper {
     //private static final String TABLE_SEC_QUES = "password_questions";
     private static final String TABLE_PASS_ANS = "password_answer";
     private static final String TABLE_JOUR_ENT = "journal_entry";
+    private static final String TABLE_PHOTO = "photo";
     //private static final String PRIMKEY_SECURITY = "quest_id";
     private static final String PRIMKEY_ACCOUNT = "email";
     private static final String PRIMKEY_SEC_ANS = "answer_id";
@@ -39,6 +40,8 @@ public class Database extends SQLiteOpenHelper {
     private static final String COL_ENTRY = "entry";
     private static final String COL_LOC = "location";
     private static final String COL_DATE = "date";
+    private static final String COL_PHOTO_PATH = "photo_path";
+    private static final String COL_ENT_ID = "entry_id";
 
     private SQLiteDatabase database;
     private final Context myContext;
@@ -171,6 +174,19 @@ public class Database extends SQLiteOpenHelper {
         entry = fixApostrophe(entry);
         database.execSQL("UPDATE " + TABLE_JOUR_ENT + " SET " + COL_ENTRY+ " = \'"
                 +  entry + "\' WHERE " + PRIMKEY_ENTRY + "=" + entryID );
+    }
+
+    public void insertPhoto ( String photoPath, int entryNum )
+    {
+        fixApostrophe(photoPath);
+        database.execSQL("INSERT INTO " + TABLE_PHOTO + " ( " + COL_PHOTO_PATH + ", " + COL_ENT_ID + " ) VALUES ( "
+                + photoPath + ",\'" + entryNum + "\');");
+    }
+
+    public void insertPhotolist (ArrayList<String> paths, int entryNum )
+    {
+        for (String d : paths)
+            insertPhoto(d, entryNum);
     }
 
     public UserAccount getAccount(String email)
