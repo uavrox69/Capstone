@@ -42,13 +42,14 @@ public class CreateEntry extends FragmentActivity
     String textEntry = "";
     String placeLoc = "";
     String curDate = "";
-    Button addPhoto,setLoc,setDate;
+    Button addPhoto,setLoc,setDate,save;
     LocationManager locationManager;
     TextView locText,dateText;
     double lat;
     double longitude;
     Calendar date;
     ArrayList<String> entPhotos;
+    SimpleDateFormat fixDate;
 
 
     protected void onCreate(Bundle savedInstanceState)
@@ -63,6 +64,7 @@ public class CreateEntry extends FragmentActivity
         dateText = (TextView)findViewById(R.id.date);
         setDate = (Button)findViewById(R.id.set_date);
         setLoc = (Button)findViewById(R.id.set_tag);
+        save = (Button)findViewById(R.id.save_entry);
         entPhotos = new ArrayList<String>();
 
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
@@ -117,11 +119,25 @@ public class CreateEntry extends FragmentActivity
             @Override
             public void onClick(View v) {
                 date = Calendar.getInstance();
-                SimpleDateFormat fixDate = new SimpleDateFormat(" MM/dd/yyyy ");
+                fixDate = new SimpleDateFormat(" MM/dd/yyyy ");
                 curDate = fixDate.format(date.getTime());
                 dateText.setText(curDate);
 
             }
+        });
+
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                int entId = MainActivity.currInstance.db.insetEntry(fixDate.toString(),textEntry,placeLoc,MainActivity.currInstance.currAccount.getEmail());
+                Log.d("date",date.toString() + " " + entId);
+
+                if ( entPhotos != null )
+                    MainActivity.currInstance.db.insertPhotolist(entPhotos,entId);
+                finish();
+            }
+
         });
 
     }

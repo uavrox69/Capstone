@@ -162,10 +162,11 @@ public class CreateAccount extends FragmentActivity
                 {
                     db.insertAccount(email.toLowerCase(), userName, password, security_Q1, security_Q2, securityA1.toLowerCase(), securityA2.toLowerCase());
                     user= db.getAccount(email);
-                    MainActivity.currInstance.fillAccount(user);
+                    //may not need with changes
+                    //MainActivity.currInstance.fillAccount(user);
                     user.testAccount();
                     creationSuc = false;
-                    startActivity(new Intent(CreateAccount.this,JournalMainScreen.class));
+                    finish();
 
                 }
             }

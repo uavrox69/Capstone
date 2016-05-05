@@ -1,10 +1,14 @@
 package yslas.joseph.memoryjournal;
 
 import android.app.ActionBar;
+import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v4.app.FragmentActivity;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -16,6 +20,9 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.net.URI;
 import java.util.ArrayList;
 
 /**
@@ -26,7 +33,6 @@ public class PhotoAdd extends FragmentActivity
     Button addPhoto,takePhoto,savePhotos;
     GridView viewPhoto;
     ArrayList<String> imagesPathList;
-    private Bitmap resized;
 
     //trying stuff
     public static PhotoAdd currInstance = null;
@@ -34,10 +40,10 @@ public class PhotoAdd extends FragmentActivity
     private final int PICK_IMAGE_MULTIPLE = 1;
     private final int PICK_IMAGE_SINGLE = 2;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState)
     {
+        imagesPathList = new ArrayList<String>();
         super.onCreate(savedInstanceState);
         setContentView(R.layout.take_add_photos);
         currInstance = this;
@@ -51,7 +57,7 @@ public class PhotoAdd extends FragmentActivity
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                startActivityForResult(intent,PICK_IMAGE_SINGLE);
+                startActivityForResult(intent, PICK_IMAGE_SINGLE);
             }
         });
 
@@ -81,24 +87,30 @@ public class PhotoAdd extends FragmentActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == RESULT_OK) {
+            if ( requestCode == PICK_IMAGE_SINGLE )
+            {
+
+                Bitmap bp = (Bitmap) data.getExtras().get("data");
+
+                // CALL THIS METHOD TO GET THE URI FROM THE BITMAP
+                Uri tempUri = data.getData();
+
+                String photoPath = getRealPathFromURI(tempUri);
+                PhotoAdd.currInstance.imagesPathList.add(photoPath);
+                Log.d("photo",  "Image saved to " + photoPath  );
+
+            }
             if (requestCode == PICK_IMAGE_MULTIPLE) {
-                imagesPathList = new ArrayList<String>();
+
                 String[] imagesPath = data.getStringExtra("data").split("\\|");
                 for (int i = 0; i < imagesPath.length; i++) {
                     Log.d("photos", imagesPath[i] );
                     imagesPathList.add(imagesPath[i]);
-                    /*
-                    ImageView imageView = new ImageView(this);
-                    imageView.setImageBitmap(yourbitmap);
-                    imageView.setAdjustViewBounds(true);
-                    lnrImages.addView(imageView);
-                    */
                 }
-                //trying things
-                DisplayPhotos chosenPhotos = new DisplayPhotos(PhotoAdd.this,imagesPathList);
-                viewPhoto.setAdapter(chosenPhotos);
 
             }
+            DisplayPhotos chosenPhotos = new DisplayPhotos(PhotoAdd.this,imagesPathList);
+            viewPhoto.setAdapter(chosenPhotos);
         }
     }
     @Override
@@ -122,6 +134,14 @@ public class PhotoAdd extends FragmentActivity
         }
         return super.onOptionsItemSelected(item);
     }
+
+    public String getRealPathFromURI(Uri uri) {
+        Cursor cursor = getContentResolver().query(uri, null, null, null, null);
+        cursor.moveToFirst();
+        int idx = cursor.getColumnIndex(MediaStore.Images.ImageColumns.DATA);
+        return cursor.getString(idx);
+    }
+
 
     //trying
     public ArrayList<String> grablist()

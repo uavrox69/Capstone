@@ -44,9 +44,9 @@ public class CustomPhotoGalleryActivity extends Activity {
         btnSelect= (Button) findViewById(R.id.btnSelect);
 
         final String[] columns = { MediaStore.Images.Media.DATA, MediaStore.Images.Media._ID };
-        final String orderBy = MediaStore.Images.Media._ID;
+        final String orderBy = MediaStore.Images.Media.DATE_ADDED;
         @SuppressWarnings("deprecation")
-        Cursor imagecursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy);
+        Cursor imagecursor = managedQuery(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, columns, null, null, orderBy + " DESC");
         int image_column_index = imagecursor.getColumnIndex(MediaStore.Images.Media._ID);
         this.count = imagecursor.getCount();
         this.arrPath = new String[this.count];

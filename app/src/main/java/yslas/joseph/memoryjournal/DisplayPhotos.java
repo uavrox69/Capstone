@@ -21,8 +21,6 @@ public class DisplayPhotos extends BaseAdapter {
     private final ArrayList<String> photos;
     Bitmap disPhoto;
 
-    private final int MAX_SIZE = 120 * 120;
-
     public DisplayPhotos(Context c,ArrayList<String> photos ) {
         mContext = c;
         this.photos = photos;
@@ -57,8 +55,7 @@ public class DisplayPhotos extends BaseAdapter {
 
             grid = new View(mContext);
             grid = inflater.inflate(R.layout.custom_gallery_item, null);
-            disPhoto = BitmapFactory.decodeFile(photos.get(position));
-            disPhoto = Bitmap.createScaledBitmap(disPhoto,(int)(disPhoto.getWidth() *0.4),(int)(disPhoto.getHeight() *0.4),true);
+            disPhoto = BitmapFactory.decodeFile(photos.get(position));disPhoto = Bitmap.createScaledBitmap(disPhoto,(int)(disPhoto.getWidth() *0.05),(int)(disPhoto.getHeight() *0.05),true);
             ImageView imageView = (ImageView)grid.findViewById(R.id.imgThumb);
 
 

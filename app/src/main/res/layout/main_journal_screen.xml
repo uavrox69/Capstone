@@ -47,9 +47,25 @@
             android:text="logout"/>
     </RelativeLayout>
 
+    <GridView
+        android:id="@+id/entry_grid"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:layout_weight="1"
+        android:numColumns="2"
+        android:verticalSpacing="10dp"
+        android:horizontalSpacing="60dp"
+        android:columnWidth="90dp"
+        android:stretchMode="columnWidth"
+        android:gravity="center"
+        android:layout_below="@+id/journal_button_bar">
+
+        </GridView>
+<!--
         <android.support.v4.view.ViewPager
             android:id="@+id/journal_pager"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:layout_below="@+id/journal_button_bar"/>
+    -->
 </RelativeLayout>

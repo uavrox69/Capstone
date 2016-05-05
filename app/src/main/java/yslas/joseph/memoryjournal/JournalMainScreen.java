@@ -5,23 +5,35 @@ import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.GridView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
 
 /**
  * Created by JYsla_000 on 2/26/2016.
  * this is the main screen of the memory journal
  */
 public class JournalMainScreen extends FragmentActivity {
-
+//todo eventually use a view pager instead of gridview to save memory, move database over?
+    ArrayList<Integer> entryKeys,photoKeys;
+    UserAccount userAccount;
+    ArrayList<Entry>userEnts;
+    ArrayList<String> coverPhotos;
+    Button newEntry,options,logOut;
+    TextView header;
+    GridView entryGrid;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_journal_screen);
-        Button newEntry = (Button)findViewById(R.id.new_entry);
-        Button options = (Button)findViewById(R.id.options);
-        Button logOut = (Button)findViewById(R.id.logout);
-
+        newEntry = (Button)findViewById(R.id.new_entry);
+        options = (Button)findViewById(R.id.options);
+        logOut = (Button)findViewById(R.id.logout);
+        header = (TextView)findViewById(R.id.journal_header);
+        entryGrid = (GridView)findViewById(R.id.entry_grid);
 
         newEntry.setOnClickListener( new View.OnClickListener() {
             @Override
@@ -29,5 +41,35 @@ public class JournalMainScreen extends FragmentActivity {
                 startActivity(new Intent(JournalMainScreen.this,CreateEntry.class));
             }
         });
+
+        userAccount = MainActivity.currInstance.getCurrAccount();
+        header.setText(userAccount.getUName() + "'s Journal");
+        setUpEntries();
+
+
+    }
+
+    protected void onResume()
+    {
+        super.onResume();
+        setUpEntries();
+    }
+
+    void setUpEntries()
+    {
+        entryKeys = MainActivity.currInstance.db.entryKeys(userAccount.getEmail());
+        if ( entryKeys != null )
+        {
+            int i = 0;
+            for (int e : entryKeys)
+            {
+                userEnts.add(MainActivity.currInstance.db.grabEntry(e));
+                Entry currEnt = userEnts.get(i);
+                coverPhotos.add(currEnt.grabCoverPhoto());
+                i++;
+            }
+            DisplayPhotos coverPho = new DisplayPhotos(JournalMainScreen.this,coverPhotos);
+            entryGrid.setAdapter(coverPho);
+        }
     }
 }

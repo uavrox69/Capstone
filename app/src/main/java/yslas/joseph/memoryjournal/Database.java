@@ -1,11 +1,16 @@
 package yslas.joseph.memoryjournal;
 
 import java.io.File;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Date;
+
+import android.content.ContentValues;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -29,10 +34,12 @@ public class Database extends SQLiteOpenHelper {
     private static final String TABLE_PHOTO = "photo";
     //private static final String PRIMKEY_SECURITY = "quest_id";
     private static final String PRIMKEY_ACCOUNT = "email";
+    private static final String PRIMKEY_PHOTO = "photo_id";
     private static final String PRIMKEY_SEC_ANS = "answer_id";
     private static final String PRIMKEY_ENTRY = "entry_id";
     private static final String COL_QUES = "quest";
     private static final String COL_A_EMAIL = "acct_email";
+    private static final String COL_E_EMAIL = "acc_email";
     //private static final String COL_Q_ID = "quest";
     private static final String COL_ANS = "answer";
     private static final String COL_U_NAME = "name";
@@ -164,10 +171,107 @@ public class Database extends SQLiteOpenHelper {
 
     }
 
-    public void insetEntry ( String date, String entry )
+    public int insetEntry ( String date, String entry, String loc, String email )
     {
-        database.execSQL("INSERT INTO " + TABLE_JOUR_ENT + "( " + COL_DATE + ", " + COL_ENTRY +") " + " VALUES ( \'"+ date  +"\', \'" + entry + " \');");
+        int entryID;
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COL_LOC,loc);
+        contentValues.put(COL_DATE,date);
+        contentValues.put(COL_ENTRY,entry);
+        contentValues.put(COL_E_EMAIL,email);
+        entryID = (int)(database.insert(TABLE_JOUR_ENT,null,contentValues));
+        return entryID;
     }
+
+    public  Entry grabEntry ( int entryKey )
+    {
+        Entry grabbedEnt;
+        ArrayList<String>photos = grabPhotoList(entryKey);
+        categoryCursor = database.query(true, TABLE_JOUR_ENT, null,
+                PRIMKEY_ENTRY + "=?",  new String[] { String.valueOf(entryKey)  }, null, null, null, null);
+        categoryCursor.moveToFirst();
+
+        SimpleDateFormat formatter = new SimpleDateFormat("mm/dd/yyyy");
+        String dbDate = categoryCursor.getString(categoryCursor.getColumnIndex(COL_DATE));
+        Date entDate = new Date();
+
+        try {
+            entDate = formatter.parse(dbDate);
+        }catch (ParseException e)
+        {
+            e.printStackTrace();
+        }
+
+        grabbedEnt = new Entry(categoryCursor.getString(categoryCursor.getColumnIndex(COL_ENTRY)),photos,entDate,categoryCursor.getString(categoryCursor.getColumnIndex(COL_ENTRY)));
+        int ingCol = categoryCursor.getColumnIndex(PRIMKEY_ENTRY);
+
+        return grabbedEnt;
+    }
+
+    public ArrayList<String> grabPhotoList ( int entryKey)
+    {
+        categoryCursor = database.query(true, TABLE_PHOTO,  new String[] { COL_PHOTO_PATH },
+                PRIMKEY_ENTRY + "=?",  new String[] { String.valueOf(entryKey)  }, null, null, COL_PHOTO_PATH + " ASC", null);
+        categoryCursor.moveToFirst();
+
+        ArrayList<String> photoPaths;
+        int ingCol = categoryCursor.getColumnIndex(COL_PHOTO_PATH);
+        if (categoryCursor.getCount() == 0 )
+            photoPaths =null;
+        else {
+            photoPaths = new ArrayList<String>(categoryCursor.getCount());
+            try {
+                do {
+                    photoPaths.add(categoryCursor.getString(ingCol));
+                } while (categoryCursor.moveToNext());
+            } catch (Exception e) {
+
+            }
+        }
+        return photoPaths;
+    }
+
+    public ArrayList<Integer> entryKeys ( String email )
+    {
+        categoryCursor = database.query(true, TABLE_JOUR_ENT,  new String[] { PRIMKEY_ENTRY },
+                COL_E_EMAIL + "=?",  new String[] { email  }, null, null, PRIMKEY_ENTRY + " ASC", null);
+        categoryCursor.moveToFirst();
+        ArrayList<Integer> entryKeys;
+        Log.d("count", categoryCursor.getCount() + "");
+        if (categoryCursor.getCount() == 0 )
+            entryKeys = null;
+        else {
+            entryKeys = new ArrayList<Integer>(categoryCursor.getCount());
+            int ingCol = categoryCursor.getColumnIndex(PRIMKEY_ENTRY);
+            try {
+                do {
+                    entryKeys.add(Integer.parseInt(categoryCursor.getString(ingCol)));
+                } while (categoryCursor.moveToNext());
+            } catch (Exception e) {
+
+            }
+        }
+        return entryKeys;
+    }
+
+    public ArrayList<Integer>photoKeys ( int entryKey )
+    {
+        categoryCursor = database.query(true, TABLE_PHOTO,  new String[] { PRIMKEY_PHOTO },
+                PRIMKEY_ENTRY + "=?",  new String[] { String.valueOf(entryKey)  }, null, null, PRIMKEY_PHOTO + " ASC", null);
+        categoryCursor.moveToFirst();
+
+        ArrayList<Integer> entryKeys = new ArrayList<Integer>(categoryCursor.getCount());
+        int ingCol = categoryCursor.getColumnIndex(PRIMKEY_ENTRY);
+        try {
+            do {
+                entryKeys.add(Integer.parseInt(categoryCursor.getString(ingCol)));
+            } while (categoryCursor.moveToNext());
+        } catch (Exception e) {
+
+        }
+        return entryKeys;
+    }
+
 
     public void updateTextEntry ( int entryID, String entry )
     {
@@ -178,9 +282,8 @@ public class Database extends SQLiteOpenHelper {
 
     public void insertPhoto ( String photoPath, int entryNum )
     {
-        fixApostrophe(photoPath);
         database.execSQL("INSERT INTO " + TABLE_PHOTO + " ( " + COL_PHOTO_PATH + ", " + COL_ENT_ID + " ) VALUES ( "
-                + photoPath + ",\'" + entryNum + "\');");
+                + "\'" +photoPath + "\',\'" + entryNum + "\');");
     }
 
     public void insertPhotolist (ArrayList<String> paths, int entryNum )

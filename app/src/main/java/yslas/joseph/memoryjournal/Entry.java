@@ -1,5 +1,8 @@
 package yslas.joseph.memoryjournal;
 
+import android.net.Uri;
+
+import java.util.ArrayList;
 import java.util.Date;
 
 /**
@@ -8,11 +11,11 @@ import java.util.Date;
 public class Entry
 {
     private Date entryDate;
-    private PhotoList photos;
+    public ArrayList<String> photos;
     String entry;
     String location;
 
-    public Entry ( String ent, PhotoList paths, Date entDate, String Loc)
+    public Entry ( String ent, ArrayList<String> paths, Date entDate, String Loc)
     {
         this.entry = ent;
         this.entryDate = entDate;
@@ -29,13 +32,24 @@ public class Entry
         return this.entryDate;
     }
 
-    public void setPhotos (PhotoList newPaths)
+    public void setPhotos (ArrayList<String> newPaths)
     {
         this.photos = newPaths;
     }
-    public PhotoList getPhotos()
+    public ArrayList<String> getPhotos()
     {
         return this.photos;
+    }
+    public String grabCoverPhoto()
+    {
+        String path;
+        if (photos != null )
+            path = photos.get(0);
+        else {
+            Uri fileUri = Uri.parse("android.resource://yslas.joseph.memoryjournal/"+R.drawable.sunset_background);
+            path = fileUri.getPath();
+        }
+        return path;
     }
 
     public void setEntry ( String ent )
@@ -45,5 +59,14 @@ public class Entry
     public String getEntry()
     {
         return this.entry;
+    }
+
+    public void setLocation(String location )
+    {
+        this.location = location;
+    }
+    public String getLocation()
+    {
+        return this.location;
     }
 }

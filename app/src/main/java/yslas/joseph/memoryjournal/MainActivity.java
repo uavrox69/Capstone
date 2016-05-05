@@ -108,6 +108,7 @@ public class MainActivity extends FragmentActivity  {
         pass = ((EditText)findViewById(R.id.login_password)).getText().toString();
         if (db.doesMatch(email.toLowerCase(),pass))
         {
+            currAccount = db.getAccount(email.toLowerCase());
             startActivity(new Intent(MainActivity.this,JournalMainScreen.class));
         }
         else
