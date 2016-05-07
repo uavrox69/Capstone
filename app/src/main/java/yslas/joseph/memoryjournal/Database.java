@@ -55,9 +55,29 @@ public class Database extends SQLiteOpenHelper {
     private static Cursor categoryCursor;
     private static Cursor categoryCursor2;
 
+    private static Database instance = null;
+    public static Database getInstance() {
+        return instance;
+    }
+
+    public static void instantiate(Context context) {
+        instance = new Database(context);
+    }
+
     public Database(Context context) {
         super(context,DB_NAME,null,DB_VERSION);
         myContext = context;
+
+        try {
+            createDataBase();
+        } catch (IOException ioe) {
+            throw new Error("Unable to create database");
+        }
+        try {
+            openDataBase();
+        } catch (SQLException sqle) {
+            throw sqle;
+        }
     }
     @Override
     public void onCreate(SQLiteDatabase db) {
