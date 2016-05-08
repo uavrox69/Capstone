@@ -1,6 +1,7 @@
 package yslas.joseph.memoryjournal;
 
 import android.net.Uri;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -46,8 +47,8 @@ public class Entry
         if (photos != null )
             path = photos.get(0);
         else {
-            Uri fileUri = Uri.parse("android.resource://yslas.joseph.memoryjournal/"+R.drawable.sunset_background);
-            path = fileUri.getPath();
+            Log.d("path", "using else");
+            path = null;
         }
         return path;
     }

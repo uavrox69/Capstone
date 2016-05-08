@@ -52,6 +52,8 @@ public class JournalMainScreen extends FragmentActivity {
     protected void onResume()
     {
         super.onResume();
+        entryKeys = new ArrayList<Integer>();
+        coverPhotos = new ArrayList<String>();
         setUpEntries();
     }
 
