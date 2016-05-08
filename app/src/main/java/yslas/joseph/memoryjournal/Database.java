@@ -154,6 +154,8 @@ public class Database extends SQLiteOpenHelper {
         super.close();
     }
 
+    public static Database
+
     //this is to place the information into the database
     public  void insertAccount ( String email, String uName,String password, String q1,
                                  String q2, String a1, String a2 )
