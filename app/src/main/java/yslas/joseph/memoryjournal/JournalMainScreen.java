@@ -18,8 +18,8 @@ public class JournalMainScreen extends FragmentActivity {
 //todo eventually use a view pager instead of gridview to save memory, move database over?
     ArrayList<Integer> entryKeys,photoKeys;
     UserAccount userAccount;
-    ArrayList<Entry>userEnts;
-    ArrayList<String> coverPhotos;
+    ArrayList<Entry>userEnts = new ArrayList<>();
+    ArrayList<String> coverPhotos = new ArrayList<>();
     Button newEntry,options,logOut;
     TextView header;
     GridView entryGrid;
@@ -42,7 +42,7 @@ public class JournalMainScreen extends FragmentActivity {
             }
         });
 
-        userAccount = MainActivity.currInstance.getCurrAccount();
+        userAccount = MainActivity.getCurrAccount();
         header.setText(userAccount.getUName() + "'s Journal");
         setUpEntries();
 
@@ -57,13 +57,13 @@ public class JournalMainScreen extends FragmentActivity {
 
     void setUpEntries()
     {
-        entryKeys = MainActivity.currInstance.db.entryKeys(userAccount.getEmail());
+        entryKeys = Database.getInstance().entryKeys(userAccount.getEmail());
         if ( entryKeys != null )
         {
             int i = 0;
             for (int e : entryKeys)
             {
-                userEnts.add(MainActivity.currInstance.db.grabEntry(e));
+                userEnts.add(Database.getInstance().grabEntry(e));
                 Entry currEnt = userEnts.get(i);
                 coverPhotos.add(currEnt.grabCoverPhoto());
                 i++;

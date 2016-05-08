@@ -47,7 +47,8 @@ public class CreateAccount extends FragmentActivity
         questionSpin2 = (Spinner)findViewById(R.id.question_spinner2);
         Button back = (Button) (findViewById(R.id.main_back_button));
         Button createAccount = (Button)(findViewById(R.id.create_button));
-        db = MainActivity.currInstance.getDb();
+        //db = MainActivity.currInstance.getDb();
+        db = Database.getInstance();
 
         //these two methods are to create and fill the spinners on the create account page
         final ArrayAdapter<String>questionAdapt = new ArrayAdapter<String>(this,android.R.layout.simple_spinner_item,securityQuestions){

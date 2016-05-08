@@ -111,7 +111,7 @@ public class CreateEntry extends FragmentActivity
         addPhoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(CreateEntry.this,PhotoAdd.class));
+                startActivity(new Intent(CreateEntry.this, PhotoAdd.class));
             }
         });
 
@@ -122,19 +122,31 @@ public class CreateEntry extends FragmentActivity
                 fixDate = new SimpleDateFormat(" MM/dd/yyyy ");
                 curDate = fixDate.format(date.getTime());
                 dateText.setText(curDate);
-
             }
         });
+
+        date = Calendar.getInstance();
+        fixDate = new SimpleDateFormat(" MM/dd/yyyy ");
+        curDate = fixDate.format(date.getTime());
 
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (fixDate == null || textEntry == null || placeLoc == null) {
+                    Log.d("CreateEntry", "Something is null: ");
+                    try {
+                        Log.d("Create Entry",  ""+ fixDate + textEntry + placeLoc);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
 
-                int entId = MainActivity.currInstance.db.insetEntry(fixDate.toString(),textEntry,placeLoc,MainActivity.currInstance.currAccount.getEmail());
-                Log.d("date",date.toString() + " " + entId);
+                int entId = Database.getInstance().insetEntry(fixDate.toString(),textEntry,placeLoc,MainActivity.getCurrAccount().getEmail());
+
+                Log.d("date", date.toString() + " " + entId);
 
                 if ( entPhotos != null )
-                    MainActivity.currInstance.db.insertPhotolist(entPhotos,entId);
+                    Database.getInstance().insertPhotolist(entPhotos,entId);
                 finish();
             }
 

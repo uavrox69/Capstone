@@ -19,10 +19,10 @@ import java.io.IOException;
 
 public class MainActivity extends FragmentActivity  {
 
-    Database db = new Database(this);
-    UserAccount currAccount;
+    //Database db = new Database(this);
+    private static UserAccount currAccount;
 
-    public static MainActivity currInstance = null;
+    //public static MainActivity currInstance = null;
 
     String email;
     String pass;
@@ -34,18 +34,8 @@ public class MainActivity extends FragmentActivity  {
         setContentView(R.layout.main_screen);
         Button create = (Button)(findViewById(R.id.create_account));
         Button login = (Button) (findViewById(R.id.login_button));
-        currInstance = this;
-
-        try {
-            db.createDataBase();
-        } catch (IOException ioe) {
-            throw new Error("Unable to create database");
-        }
-        try {
-            db.openDataBase();
-        } catch (SQLException sqle) {
-            throw sqle;
-        }
+        //currInstance = this;
+        Database.instantiate(this);
 
         create.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -87,7 +77,7 @@ public class MainActivity extends FragmentActivity  {
     //getDb:
     //  Returns the currently opened database
     public Database getDb() {
-        return db;
+        return Database.getInstance();
     }
 
 
@@ -97,18 +87,18 @@ public class MainActivity extends FragmentActivity  {
         this.currAccount = filledOut;
     }
     //get current account
-    public UserAccount getCurrAccount()
+    public static UserAccount getCurrAccount()
     {
-        return this.currAccount;
+        return currAccount;
     }
 
     public void verifyAccount()
     {
         email = ((EditText)findViewById(R.id.login_entry)).getText().toString();
         pass = ((EditText)findViewById(R.id.login_password)).getText().toString();
-        if (db.doesMatch(email.toLowerCase(),pass))
+        if (Database.getInstance().doesMatch(email.toLowerCase(), pass))
         {
-            currAccount = db.getAccount(email.toLowerCase());
+            currAccount = Database.getInstance().getAccount(email.toLowerCase());
             startActivity(new Intent(MainActivity.this,JournalMainScreen.class));
         }
         else
