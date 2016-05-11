@@ -114,8 +114,9 @@ public class JournalMainScreen extends FragmentActivity {
             for (int e : entryKeys)
             {
                 Log.d("entrynumbers", " " + e + i);
-                userEnts.add(Database.getInstance().grabEntry(e));
-                Entry currEnt = userEnts.get(i);
+                Entry currEnt = Database.getInstance().grabEntry(e);
+                userEnts.add(currEnt);
+//                Entry currEnt = userEnts.get(i);
                 coverPhotos.add(currEnt.grabCoverPhoto());
                 i++;
             }
