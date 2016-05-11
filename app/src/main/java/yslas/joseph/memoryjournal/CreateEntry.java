@@ -42,7 +42,7 @@ public class CreateEntry extends FragmentActivity
     String textEntry = "";
     String placeLoc = "";
     String curDate = "";
-    Button addPhoto,setLoc,setDate,save;
+    Button addPhoto,setLoc,setDate,save,back;
     LocationManager locationManager;
     TextView locText,dateText;
     double lat;
@@ -66,6 +66,14 @@ public class CreateEntry extends FragmentActivity
         setLoc = (Button)findViewById(R.id.set_tag);
         save = (Button)findViewById(R.id.save_entry);
         entPhotos = new ArrayList<String>();
+
+        back = (Button) findViewById(R.id.back);
+        back.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
 
         locationManager = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
 
@@ -141,6 +149,7 @@ public class CreateEntry extends FragmentActivity
                     }
                 }
 
+                Log.d("loc", placeLoc);
                 int entId = Database.getInstance().insetEntry(fixDate.toString(),textEntry,placeLoc,MainActivity.getCurrAccount().getEmail());
 
                 Log.d("date", date.toString() + " " + entId);

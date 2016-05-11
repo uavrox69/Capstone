@@ -3,10 +3,15 @@ package yslas.joseph.memoryjournal;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -23,6 +28,7 @@ public class JournalMainScreen extends FragmentActivity {
     Button newEntry,options,logOut;
     TextView header;
     GridView entryGrid;
+    public static JournalMainScreen currInstance = null;
 
 
     @Override
@@ -34,11 +40,39 @@ public class JournalMainScreen extends FragmentActivity {
         logOut = (Button)findViewById(R.id.logout);
         header = (TextView)findViewById(R.id.journal_header);
         entryGrid = (GridView)findViewById(R.id.entry_grid);
+        currInstance = this;
+
+        logOut = (Button) findViewById(R.id.logout);
+        logOut.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        options = (Button)findViewById(R.id.options);
+        options.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                createMessage();
+            }
+        });
 
         newEntry.setOnClickListener( new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(JournalMainScreen.this,CreateEntry.class));
+                //currInstance = null;
+            }
+        });
+
+        entryGrid.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.d("entry", "" + position);
+                Intent i = new Intent(JournalMainScreen.this,EntryScreen.class);
+                i.putExtra("id",position);
+                startActivity(i);
             }
         });
 
@@ -49,12 +83,26 @@ public class JournalMainScreen extends FragmentActivity {
 
     }
 
+    private void createMessage()
+    {
+        Toast message = Toast.makeText(this,"Not yet implemented",Toast.LENGTH_LONG);
+        message.setGravity(Gravity.CENTER, 0, 0);
+        message.show();
+    }
+
     protected void onResume()
     {
         super.onResume();
+        Database.instantiate(this);
         entryKeys = new ArrayList<Integer>();
         coverPhotos = new ArrayList<String>();
         setUpEntries();
+        //currInstance = this;
+    }
+
+    public Entry sendEntry (int postion )
+    {
+        return userEnts.get(postion);
     }
 
     void setUpEntries()
@@ -65,6 +113,7 @@ public class JournalMainScreen extends FragmentActivity {
             int i = 0;
             for (int e : entryKeys)
             {
+                Log.d("entrynumbers", " " + e + i);
                 userEnts.add(Database.getInstance().grabEntry(e));
                 Entry currEnt = userEnts.get(i);
                 coverPhotos.add(currEnt.grabCoverPhoto());

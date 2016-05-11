@@ -222,7 +222,7 @@ public class Database extends SQLiteOpenHelper {
             e.printStackTrace();
         }
 
-        grabbedEnt = new Entry(categoryCursor.getString(categoryCursor.getColumnIndex(COL_ENTRY)),photos,entDate,categoryCursor.getString(categoryCursor.getColumnIndex(COL_ENTRY)));
+        grabbedEnt = new Entry(categoryCursor.getString(categoryCursor.getColumnIndex(COL_ENTRY)),photos,entDate,categoryCursor.getString(categoryCursor.getColumnIndex(COL_LOC)));
         int ingCol = categoryCursor.getColumnIndex(PRIMKEY_ENTRY);
 
         return grabbedEnt;

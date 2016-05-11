@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/mem_ent_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/sunset_background"
+    android:baselineAligned="false"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/entry_header"
+        android:layout_width="562dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:gravity="center"
+        android:text="Entry View"
+        android:textColor="@android:color/white"
+        android:textSize="25sp"
+        />
+
+
+
+    <TextView
+        android:id="@+id/place_loc"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/layout_text_pho"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+       />
+
+    <TextView
+        android:id="@+id/date"
+        android:layout_width="wrap_content"
+        android:layout_height="40dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
+        android:layout_below="@+id/layout_text_pho"
+        android:layout_toRightOf="@+id/place_loc"
+        android:textColor="@color/white"
+        android:textSize="20dp"/>
+
+    <Button
+        android:id="@+id/ent_pho_selection"
+        android:layout_width="150dp"
+        android:layout_height="50dp"
+        android:layout_below="@id/entry_header"
+        android:layout_marginLeft="110dp"
+        android:text="photo/entry"/>
+
+    <RelativeLayout
+        android:id="@+id/layout_text_pho"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_below="@+id/ent_pho_selection">
+        <TextView
+            android:id="@+id/selected_entry"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:background="@color/white"
+            android:gravity="top|left"
+
+            />
+        <GridView
+            android:id="@+id/ent_photos"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:numColumns="2"
+            android:verticalSpacing="10dp"
+            android:horizontalSpacing="60dp"
+            android:columnWidth="90dp"
+            android:stretchMode="columnWidth"
+            android:visibility="invisible"
+            android:gravity="center"/>
+
+    </RelativeLayout>
+
+
+    <RelativeLayout
+        android:id="@+id/journal_button_bar"
+        android:layout_width="fill_parent"
+        android:layout_height="70dp"
+        android:layout_below="@+id/date">
+
+        <Button
+            android:id="@+id/end"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="140dp"
+            android:text="back"/>
+        <Button
+            android:id="@+id/edit_entry"
+            android:layout_width="100dp"
+            android:layout_height="60dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toRightOf="@+id/end"
+            android:text="edit Entry"
+            android:visibility="invisible"/>
+
+    </RelativeLayout>
+
+
+</RelativeLayout>

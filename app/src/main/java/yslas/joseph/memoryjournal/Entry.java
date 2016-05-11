@@ -3,6 +3,7 @@ package yslas.joseph.memoryjournal;
 import android.net.Uri;
 import android.util.Log;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -12,15 +13,15 @@ import java.util.Date;
 public class Entry
 {
     private Date entryDate;
-    public ArrayList<String> photos;
+    public ArrayList<String> photos= new ArrayList<String>();
     String entry;
     String location;
 
-    public Entry ( String ent, ArrayList<String> paths, Date entDate, String Loc)
+    public Entry ( String ent, ArrayList<String> paths, Date entDate, String loc)
     {
         this.entry = ent;
         this.entryDate = entDate;
-        this.location = location;
+        this.location = loc;
         this.photos = paths;
     }
 
@@ -28,9 +29,12 @@ public class Entry
     {
         this.entryDate = newdate;
     }
-    public Date getEntryDate()
+    public String getEntryDate()
     {
-        return this.entryDate;
+        String curDate;
+        SimpleDateFormat fixDate = new SimpleDateFormat(" MM/dd/yyyy ");
+        curDate = fixDate.format(entryDate.getTime());
+        return curDate;
     }
 
     public void setPhotos (ArrayList<String> newPaths)
@@ -68,6 +72,9 @@ public class Entry
     }
     public String getLocation()
     {
-        return this.location;
+        Log.d("loc",location + " is here");
+        return location;
     }
+
+
 }
